@@ -18,7 +18,7 @@ concurrency:
 jobs:
   preflight:
     name: Preflight / repository invariants
-    runs-on: ubuntu-24.04
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64","linux-native"]') }}
     timeout-minutes: 10
     outputs:
       version: ${{ steps.meta.outputs.version }}
@@ -42,7 +42,7 @@ jobs:
   portable-core:
     name: Linux / C11
     needs: preflight
-    runs-on: ubuntu-24.04
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64","linux-native"]') }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -81,7 +81,7 @@ jobs:
   sanitizers:
     name: Linux / ASan + UBSan
     needs: preflight
-    runs-on: ubuntu-24.04
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64","linux-native"]') }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
